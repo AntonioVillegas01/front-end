@@ -1,12 +1,15 @@
 import React from 'react';
 
 import {useStaticQuery, graphql} from "gatsby";
-import {Grid, IconButton, makeStyles, Typography} from "@material-ui/core";
+import {Chip, Grid, IconButton, makeStyles, Typography} from "@material-ui/core";
 import clsx from 'clsx'
 
 import featuredAdornment from '../../images/featured-adornment.svg'
 import frame from '../../images/product-frame-grid.svg'
+import explore from '../../images/explore.svg'
 import promoAdornment from "../../images/promo-adornment.svg";
+import Rating from "./Rating";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
     background: {
@@ -17,6 +20,12 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         height: '180rem',
         padding: '0 2.5rem',
+    },
+    chipLabel:{
+        ...theme.typography.h5,
+    },
+    chipRoot:{
+        backgroundColor:theme.palette.secondary.main
     },
     productContainer: {
         margin: '5rem 0'
@@ -34,6 +43,17 @@ const useStyles = makeStyles(theme => ({
         position: "absolute",
         zIndex:1
     },
+    exploreContainer:{
+        marginTop: 'auto'
+    },
+    exploreButton:{
+        marginTop: 'auto',
+        textTransform: "none"
+    },
+    exploreIcon:{
+        height: '1.5rem',
+        marginLeft: '1rem'
+    },
     featured: {
         height: '20rem',
         width: '20rem'
@@ -43,7 +63,8 @@ const useStyles = makeStyles(theme => ({
         height: '20rem',
         width: '24.5rem',
         transition: 'transform 0.5s ease',
-        zIndex: 0
+        zIndex: 0,
+        padding: '1rem 2rem'
     },
     slideLeft: {
         transform: 'translate(-24.5rem, 0px)',
@@ -77,7 +98,7 @@ const FeaturedProducts = () => {
         }
     `)
 
-    console.log(edges)
+    // console.log(edges)
 
     return (
         <Grid container
@@ -120,7 +141,30 @@ const FeaturedProducts = () => {
                                       })
                                   }}
                             >
-
+                                <Grid item>
+                                    <Typography variant={'h4'}>
+                                        {node.name.split(' ')[0]}
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Rating number={1.5}/>
+                                </Grid>
+                                <Grid item>
+                                    <Chip label={`$${node.variants[0].price}`}
+                                          classes={{root:classes.chipRoot, label: classes.chipLabel}}
+                                    />
+                                </Grid>
+                                <Grid item classes={{root: classes.exploreContainer}}>
+                                    <Button classes={{root: classes.exploreButton}}>
+                                        <Typography variant={'h5'}>
+                                            Details
+                                        </Typography>
+                                        <img src={explore}
+                                             alt="go to products details"
+                                             className={classes.exploreIcon}
+                                        />
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </Grid>
                     )
