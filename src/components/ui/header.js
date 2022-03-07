@@ -44,10 +44,19 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 'auto',
         marginRight: 'auto'
     },
+    logo:{
+        [theme.breakpoints.down('xs')]:{
+            fontSize: '3rem',
+        }
+    },
     icon: {
         height: '3rem',
         width: '3rem',
-        padding: 10
+        padding: 10,
+        [theme.breakpoints.down('xs')]:{
+            height: '2rem',
+            width:'2rem'
+        }
     },
     drawer:{
         backgroundColor: theme.palette.primary.main,
@@ -147,12 +156,12 @@ const Header = ({categories}) => {
 
     return (
         <AppBar color="transparent" elevation={0} position={"static"}>
-            <Toolbar>
+            <Toolbar disableGutters>
                 <Button
                     to={'/'}
                     component={Link}
                     classes={{root: classes.logoContainer}} >
-                    <Typography variant="h1" classes={{h1: classes.tabs}}>
+                    <Typography variant="h1" classes={{root: classes.logo}}>
                         <span className={classes.logoText}>VAR </span>X
                     </Typography>
                 </Button>

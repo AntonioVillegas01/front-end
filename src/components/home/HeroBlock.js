@@ -1,10 +1,30 @@
 import React from 'react';
-import {Grid, Typography} from "@material-ui/core";
+import {Grid, makeStyles, Typography, useMediaQuery} from "@material-ui/core";
 import Lottie from 'react-lottie';
 
 import animationData from '../../images/data.json'
 
+const useStyles = makeStyles(theme => ({
+    textContainer:{
+        padding: '2rem',
+        [theme.breakpoints.down('xs')]:{
+            padding: '1rem'
+        }
+    },
+    heading:{
+        [theme.breakpoints.down('xs')]:{
+            fontSize: '3.5rem'
+        }
+    }
+}))
+
 const HeroBlock = () => {
+
+    const classes = useStyles()
+
+    const matchesLG = useMediaQuery(theme => theme.breakpoints.down('lg'))
+    const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'))
+    const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'))
 
     const defaultOptions = {
         loop: true,
@@ -16,12 +36,11 @@ const HeroBlock = () => {
         <Grid container
               justifyContent={'space-around'}
               alignItems={'center'}
-              style={{marginLeft:'20px'}}
         >
-            <Grid item>
+            <Grid item classes={{root: classes.textContainer}}>
                 <Grid container direction={'column'}>
                     <Grid item>
-                        <Typography align={'left'} variant={'h1'}>
+                        <Typography classes={{root: classes.heading}} align={'center'} variant={'h1'}>
                             The Premier
                             <br/>
                             Developer Clothing Line
@@ -37,7 +56,8 @@ const HeroBlock = () => {
             <Grid item>
                 <Lottie options={defaultOptions}
                         isStopped
-                        width={'50rem'}/>
+                        width={matchesXS ? '15rem' : matchesMD ? '30rem' : matchesLG ? '40rem' : '50rem'}
+                />
             </Grid>
         </Grid>
     );
