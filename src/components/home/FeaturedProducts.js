@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import featuredAdornment from '../../images/featured-adornment.svg'
 import frame from '../../images/product-frame-grid.svg'
 import explore from '../../images/explore.svg'
-import promoAdornment from "../../images/promo-adornment.svg";
+// import promoAdornment from "../../images/promo-adornment.svg";
 import Rating from "./Rating";
 import Button from "@material-ui/core/Button";
 

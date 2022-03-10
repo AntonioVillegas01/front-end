@@ -81,9 +81,9 @@ const PromotionalProducts = () => {
 
     const classes = useStyles()
 
-    const matchesLG = useMediaQuery(theme => theme.breakpoints.down('lg'))
+    // const matchesLG = useMediaQuery(theme => theme.breakpoints.down('lg'))
     const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'))
-    const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'))
+    // const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'))
 
     const {allStrapiProduct: {edges}} = useStaticQuery(graphql`
         query getPromo {
