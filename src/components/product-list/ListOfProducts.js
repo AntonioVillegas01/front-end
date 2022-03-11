@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, makeStyles, useMediaQuery} from "@material-ui/core";
+import {useQuery} from "@apollo/client";
 import ProductFrameGrid from "./ProductFrameGrid";
 import ProductFrameList from "./ProductFrameList";
+
+import {GET_DETAILS} from "../../apollo/queries";
 
 const useStyles = makeStyles(theme => ({
     productContainer: {
@@ -59,31 +62,74 @@ const ListOfProducts = ({
         Render the correct Component using React best Practices
     * */
     const FrameHelper = ({Frame, product, variant}) => {
-
         const [selectedSize, setSelectedSize] = useState(null);
         const [selectedColor, setSelectedColor] = useState(null);
+        const [stock, setStock] = useState(null);
+        const [selectedVariant, setSelectedVariant] = useState(null);
+
+
+        // APOLLO QUERIE
+        const {loading, error, data} = useQuery(GET_DETAILS, {
+            variables: {id: product.node.strapiId}
+        })
+
+        // useEffect for querying the data of the product
+        useEffect(() => {
+
+            if (error) {
+                setStock(-1)
+            } else if (data) {
+                setStock(data.product.variants)
+            }
+
+        }, [error, data]);
+
+        useEffect(() => {
+            if(!selectedSize) return undefined
+            // reset the color
+            setSelectedColor(null)
+            let variants = product.node.variants
+
+            // set the variant to the first color
+            const newVariant = variants.find(
+                item =>
+                    item.size === selectedSize &&
+                    item.style === variant.style &&
+                    item.color === colors[0]
+            )
+            setSelectedVariant(newVariant)
+        }, [selectedSize]);
 
 
         let sizes = []
         let colors = []
-        product.node.variants.map(variant => {
-            sizes.push(variant.size)
+        product.node.variants.map(item => {
+            sizes.push(item.size)
             /*
                 check if there is no color added
              */
-            if (!colors.includes(variant.color)) {
-                colors.push(variant.color)
+            if (
+                !colors.includes(item.color)
+                && item.size === (selectedSize || variant.size)
+                && item.style === variant.style
+            ) {
+                colors.push(item.color)
             }
         })
 
-        return <Frame variant={variant}
+
+        const hasStyles = product.node.variants.some(variant => variant.style !== null)
+
+        return <Frame variant={selectedVariant || variant}
                       product={product}
                       sizes={sizes}
                       colors={colors}
-                      selectedSize={selectedSize}
+                      selectedSize={selectedSize || variant.size}
                       selectedColor={selectedColor}
                       setSelectedSize={setSelectedSize}
                       setSelectedColor={setSelectedColor}
+                      hasStyles={hasStyles}
+                      stock={stock}
         />
     }
 

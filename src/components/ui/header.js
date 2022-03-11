@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     colorIndicator: {
         backgroundColor: '#fff',
     },
-    logoContainer:{
+    logoContainer: {
         // Adding custom styles according to breakpoint
         [theme.breakpoints.down('md')]: {
             marginRight: 'auto'
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     logoText: {
         color: theme.palette.common.offBlack
     },
-    tab:{
+    tab: {
         ...theme.typography.body1,
         fontWeight: 600
     },
@@ -44,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 'auto',
         marginRight: 'auto'
     },
-    logo:{
-        [theme.breakpoints.down('xs')]:{
+    logo: {
+        [theme.breakpoints.down('xs')]: {
             fontSize: '3rem',
         }
     },
@@ -53,16 +53,16 @@ const useStyles = makeStyles((theme) => ({
         height: '3rem',
         width: '3rem',
         padding: 10,
-        [theme.breakpoints.down('xs')]:{
+        [theme.breakpoints.down('xs')]: {
             height: '2rem',
-            width:'2rem'
+            width: '2rem'
         }
     },
-    drawer:{
+    drawer: {
         backgroundColor: theme.palette.primary.main,
         color: 'white'
     },
-    listItemText:{
+    listItemText: {
         color: 'white'
     },
     //Override global styles
@@ -87,7 +87,8 @@ const Header = ({categories}) => {
     const activeIndex = () => {
         // Desestructuring name from node
         const found = routes.indexOf(routes.filter(
-            ( {node: {name, link} } ) => (link || `/${name.toLowerCase()}`) === window.location.pathname
+            ({node: {name, link}}) => (link || `/${name.toLowerCase()}`) ===
+                `/${window.location.pathname.split('/')[1]}`
         )[0])
 
         return found === -1 ? false : found
@@ -101,9 +102,9 @@ const Header = ({categories}) => {
     const tabs = (
         <Tabs value={activeIndex()}
               classes={{
-            indicator: classes.colorIndicator,
-            root: classes.tabs
-        }}>
+                  indicator: classes.colorIndicator,
+                  root: classes.tabs
+              }}>
             {
                 routes.map(({node}) => (
                     <Tab
@@ -160,7 +161,7 @@ const Header = ({categories}) => {
                 <Button
                     to={'/'}
                     component={Link}
-                    classes={{root: classes.logoContainer}} >
+                    classes={{root: classes.logoContainer}}>
                     <Typography variant="h1" classes={{root: classes.logo}}>
                         <span className={classes.logoText}>VAR </span>X
                     </Typography>

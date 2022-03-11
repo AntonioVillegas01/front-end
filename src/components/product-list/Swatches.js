@@ -22,6 +22,8 @@ const useStyles = makeStyles(theme => ({
 }))
 const Swatches = ({colors, selectedColor, setSelectedColor}) => {
 
+    // console.log(selectedColor)
+
     const classes = useStyles()
 
     return (

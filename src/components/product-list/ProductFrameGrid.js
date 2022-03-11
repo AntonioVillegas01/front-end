@@ -73,20 +73,25 @@ const ProductFrameGrid = ({
                               selectedSize,
                               selectedColor,
                               setSelectedSize,
-                              setSelectedColor
+                              setSelectedColor,
+                              hasStyles,
+                              disableQuickView,
+                              small,
+                              stock
                           }) => {
 
-    const classes = useStyles()
+    const classes = useStyles({small})
     const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'))
 
     const [open, setOpen] = useState(false);
 
-    if(matchesMD && open){
+    if (matchesMD && open) {
         setOpen(false)
     }
 
 
     const imageIndex = colorIndex(product, variant, selectedColor)
+
 
     /*
         Set the image programmatically
@@ -107,9 +112,9 @@ const ProductFrameGrid = ({
             }}>
                 <Grid container
                       direction={'column'}
-                      onClick={() => matchesMD
+                      onClick={() => matchesMD || disableQuickView
                           ? navigate(
-                              `/${product.node.category.name.toLowerCase()}/${productName}`
+                              `/${product.node.category.name.toLowerCase()}/${productName}${hasStyles ? `?style=${variant.style}` : ''}`
                           )
                           : setOpen(true)
                       }
@@ -134,12 +139,16 @@ const ProductFrameGrid = ({
                        name={productName}
                        price={variant.price}
                        product={product}
+                       variant={variant}
                        sizes={sizes}
                        colors={colors}
                        selectedSize={selectedSize}
                        selectedColor={selectedColor}
                        setSelectedSize={setSelectedSize}
                        setSelectedColor={setSelectedColor}
+                       hasStyles={hasStyles}
+                       stock={stock}
+                       imageIndex={imageIndex}
             />
         </>
 

@@ -6,7 +6,7 @@ import Rating from "../home/Rating";
 import Sizes from "./Sizes";
 import Swatches from "./Swatches";
 import QtyButton from "./QtyButton";
-import {colorIndex} from "../utilities";
+import {colorIndex, getStockDisplay} from "../utilities";
 import {Link} from "gatsby";
 
 const useStyles = makeStyles(theme => ({
@@ -58,7 +58,9 @@ const ProductFrameList = ({
                               selectedSize,
                               selectedColor,
                               setSelectedSize,
-                              setSelectedColor
+                              setSelectedColor,
+                              hasStyles,
+                              stock
                           }) => {
 
     const classes = useStyles()
@@ -75,6 +77,12 @@ const ProductFrameList = ({
         ? product.node.variants[imageIndex].images
         : variant.images
 
+    const selectedVariant = imageIndex === -1
+        ? product.node.variants.indexOf(variant)
+        : imageIndex
+
+    const stockDisplay = getStockDisplay(stock, selectedVariant)
+
     const productName = product.node.name.split(' ')[0].toLowerCase()
 
     return (
@@ -89,7 +97,7 @@ const ProductFrameList = ({
                     images.slice(0, 4).map(image => (
                         <Grid item
                               key={image.url}
-                              to={`/${product.node.category.name.toLowerCase()}/${productName}`}
+                              to={`/${product.node.category.name.toLowerCase()}/${productName}${hasStyles ? `?style=${variant.style }` : ''}`}
                               component={Link}
                         >
                             <img src={process.env.GATSBY_STRAPI_URL + image.url}
@@ -109,7 +117,7 @@ const ProductFrameList = ({
                   justifyContent={'space-between'}
             >
                 <Grid item container direction={"column"}
-                      to={`/${product.node.category.name.toLowerCase()}/${productName}`}
+                      to={`/${product.node.category.name.toLowerCase()}/${productName}${hasStyles ? `?style=${variant.style }` : ''}`}
                       component={Link}
                 >
                     <Grid item>
@@ -126,7 +134,7 @@ const ProductFrameList = ({
                     </Grid>
                     <Grid item>
                         <Typography variant={'h3'} classes={{root: classes.stock}}>
-                            12 currently in Stock
+                            {stockDisplay}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -136,7 +144,9 @@ const ProductFrameList = ({
                     <Swatches colors={colors} selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
                 </Grid>
 
-                <QtyButton/>
+                <QtyButton stock={stock}
+                           selectedVariant={selectedVariant}
+                />
             </Grid>
         </Grid>
     );

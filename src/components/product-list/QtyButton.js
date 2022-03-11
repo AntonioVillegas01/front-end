@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, makeStyles, Typography, Button, ButtonGroup, Badge} from "@material-ui/core";
 import clsx from "clsx";
 import Cart from "../../images/Cart";
@@ -63,11 +63,38 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const QtyButton = () => {
+const QtyButton = ({stock, selectedVariant}) => {
 
     const classes = useStyles()
 
+
     const [qty, setQty] = useState(1);
+
+    const handleChange = (direction) => {
+        if (qty === stock[selectedVariant].qty && direction === "up") {
+            return
+        }
+        if (qty === 1 && direction === "down") {
+            return
+        }
+        const newQty = direction === 'up' ? qty + 1 : qty - 1
+
+        setQty(newQty)
+    }
+
+    useEffect(() => {
+
+        if (stock === null || stock === -1) {
+            return undefined
+        } else if (qty > stock[selectedVariant].qty) {
+            //if the qty  is above the stock reset the value to the current item stock
+            setQty(stock[selectedVariant].qty)
+        }
+
+
+
+    }, [stock, selectedVariant]);
+
 
     return (
         <Grid item>
@@ -78,13 +105,13 @@ const QtyButton = () => {
                     </Typography>
                 </Button>
                 <ButtonGroup orientation={'vertical'}>
-                    <Button onClick={() => setQty(qty + 1)}
+                    <Button onClick={() => handleChange('up')}
                             classes={{root: classes.editButtons}}>
                         <Typography variant={'h3'} classes={{root: classes.qtyText}}>
                             +
                         </Typography>
                     </Button>
-                    <Button onClick={() => setQty(qty - 1)}
+                    <Button onClick={() => handleChange('down')}
                             classes={{root: clsx(classes.editButtons, classes.minusButton)}}
                     >
                         <Typography variant={'h3'} classes={{root: clsx(classes.qtyText, classes.minus)}}>

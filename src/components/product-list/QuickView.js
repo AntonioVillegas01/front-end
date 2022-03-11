@@ -9,6 +9,7 @@ import Sizes from "./Sizes";
 import Swatches from "./Swatches";
 import QtyButton from "./QtyButton";
 import {Link} from "gatsby";
+import {getStockDisplay} from "../utilities";
 
 const useStyles = makeStyles(theme => ({
     selectedFrame: {
@@ -77,6 +78,7 @@ const useStyles = makeStyles(theme => ({
 const QuickView = ({
                        open,
                        setOpen,
+                       variant,
                        url,
                        name,
                        price,
@@ -86,14 +88,26 @@ const QuickView = ({
                        selectedSize,
                        selectedColor,
                        setSelectedSize,
-                       setSelectedColor
+                       setSelectedColor,
+                       stock,
+                       imageIndex
                    }) => {
 
     const classes = useStyles()
 
-    // console.log(sizes)
+    const selectedVariant = imageIndex === - 1
+        ? product.node.variants.indexOf(variant)
+        : imageIndex
+
+    const stockDisplay = getStockDisplay(stock,selectedVariant)
 
     const productName = product.node.name.split(' ')[0].toLowerCase()
+
+    let detailUrl = `/${product.node.category.name.toLowerCase()}/${productName}`
+    if (variant.style) {
+        detailUrl = `${detailUrl}?style=${variant.style}`
+    }
+
 
     return (
         <Dialog open={open}
@@ -114,7 +128,7 @@ const QuickView = ({
                         <Grid item classes={{root: classes.infoItem}}>
                             <Grid container direction={'column'} justifyContent={'space-between'}
                                   classes={{root: classes.infoContainer}}
-                                  to={`/${product.node.category.name.toLowerCase()}/${productName}`}
+                                  to={encodeURI(detailUrl)}
                                   component={Link}
                             >
                                 <Grid item>
@@ -125,7 +139,7 @@ const QuickView = ({
                                 </Grid>
                                 <Grid item>
                                     <Typography variant={'h3'} classes={{root: classes.stock}}>
-                                        12 Currently In Stock
+                                        {stockDisplay}
                                     </Typography>
                                     <Button classes={{root: classes.detailButton}}>
                                         <Typography variant={'h3'} classes={{root: classes.details}}>
@@ -155,7 +169,9 @@ const QuickView = ({
                                           setSelectedColor={setSelectedColor}
                                 />
                                 <span className={classes.qtyContainer}>
-                                <QtyButton/>
+                                    <QtyButton stock={stock}
+                                                                                                  selectedVariant={selectedVariant}
+                                />
                                 </span>
                             </Grid>
                         </Grid>

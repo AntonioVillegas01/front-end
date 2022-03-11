@@ -8,6 +8,7 @@ import ListOfProducts from "../components/product-list/ListOfProducts";
 
 import {alphabetic, time, price} from "../components/product-list/SortFunctions";
 
+
 const useStyles = makeStyles(theme => ({
     fab: {
         alignSelf: "flex-end",
@@ -46,10 +47,10 @@ const useStyles = makeStyles(theme => ({
  */
 const ProductList = ({
                          pageContext: {filterOptions: options, name, description},
-                         data
-                         // data: {allStrapiProduct: {edges:products}} another way to get products
+                         // data
+                          data: {allStrapiProduct: {edges:products}}
                      }) => {
-    const products = data.allStrapiProduct.edges
+    // const products = data.allStrapiProduct.edges
     const classes = useStyles()
 
     const [layout, setLayout] = useState('grid');
@@ -69,6 +70,7 @@ const ProductList = ({
     const scrollToTop = () => {
         scrollRef.current.scrollIntoView({behavior: 'smooth'})
     }
+
 
     useEffect(() => {
         //Everytime filterOptions is change the page is set to 1
@@ -204,7 +206,7 @@ export default ProductList;
 /*
     Anything passing from the context obj in gatsby-node.js
     its gonna be availbale inside the component Page of the
-    createPage method as a variable for the uery example the id
+    createPage method as a variable for the query example the id
     on this case is coming from the context obj,
     The query result is gonna be passed to the ProductList component
     as a prop called data
